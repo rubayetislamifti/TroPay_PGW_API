@@ -206,6 +206,13 @@ class bkash{
                 'agreementID' => $agreementID,
             ]);
         }
+
+        if ($response->successful()){
+            return response()->json([
+                'success' => false,
+                'message' => $response->json()
+            ]);
+        }
     }
 
     public function searchTransaction($trxID)
