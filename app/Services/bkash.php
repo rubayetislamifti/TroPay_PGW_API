@@ -161,10 +161,15 @@ class bkash{
         }
 
         if ($response->successful()){
+            $data = [
+                'paymentID' => $response->json('paymentID'),
+                'agreementID' => $response->json('agreementID'),
+                'customerMsisdn' => $response->json('customerMsisdn'),
+            ];
             return response()->json([
                 'success' => true,
                 'message' => 'Payment Successful',
-                'data' => $response->json('successCallbackURL')
+                'data' => $data
             ]);
         }
         elseif (!$response->successful()){
