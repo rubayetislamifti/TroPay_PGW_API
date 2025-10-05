@@ -22,6 +22,10 @@ class PaymentController extends Controller
 
         $createPayment = $bkash->createPayment($amount, $reference);
 
+        if ($createPayment instanceof \Illuminate\Http\JsonResponse) {
+            $createPayment = $createPayment->getData(true);
+        }
+
         return response()->json($createPayment);
     }
 
@@ -32,6 +36,10 @@ class PaymentController extends Controller
 
         $executePayment = $bkash->executePayment();
 
-        return $executePayment;
+        if ($executePayment instanceof \Illuminate\Http\JsonResponse) {
+            $executePayment = $executePayment->getData(true);
+        }
+
+        return response()->json($executePayment);
     }
 }
