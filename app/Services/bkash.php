@@ -167,10 +167,6 @@ class bkash{
                 'customerMsisdn' => $response->json('customerMsisdn'),
             ];
 
-            if (env('APP_ENV') === 'local') {
-                return redirect()->route('payment.success', $data);
-            }
-
             return response()->json([
                 'success' => true,
                 'message' => 'Payment Successful',
