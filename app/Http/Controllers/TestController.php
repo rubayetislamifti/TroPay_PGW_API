@@ -12,23 +12,33 @@ class TestController extends Controller
         $testApp = 'Rubayet_Islam';
         $testPassword = 'Rubayet_Islam2025';
         $baseURL = 'https://tropay.zobayerdev.top';
+        $amount = 1;
+        $reference = '01642889275';
+        try {
+            if (env('APP_ENV') === 'production') {
+                $response = Http::withHeaders([
+                    'App-Key' => $testApp,
+                    'App-Secret' => $testPassword,
+                ])->post($baseURL . '/api/payment',[
+                    'amount' => $amount,
+                    'reference' => $reference,
+                ]);
+            }else{
+                $response = Http::withoutVerifying()->withHeaders([
+                    'App-Key' => $testApp,
+                    'App-Secret' => $testPassword,
+                ])->post($baseURL . '/api/payment',[
+                    'amount' => $amount,
+                    'reference' => $reference,
+                ]);
+            }
+            if ($response->successful()){
+//                dd($response->json('payment_url'));
+                return redirect()->away($response->json()['payment_url']);
+            }
+        }catch (\Exception $e){
+            dd($e->getMessage());
+        }
 
-        if (env('APP_ENV') === 'production') {
-            $response = Http::withHeaders([
-                'App-Key' => $testApp,
-                'App-Secret' => $testPassword,
-            ])->get($baseURL . '/api/payment');
-        }else{
-            $response = Http::withoutVerifying()->withHeaders([
-                'App-Key' => $testApp,
-                'App-Secret' => $testPassword,
-            ])->get($baseURL . '/api/payment',[
-                'amount' => 1,
-                'reference' => '01642889275',
-            ]);
-        }
-        if ($response->successful()){
-            return redirect()->away($response->json('payment_url'));
-        }
     }
 }
