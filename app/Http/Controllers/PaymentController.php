@@ -24,8 +24,10 @@ class PaymentController extends Controller
 
         $checkoutLink = url('/payment/' . $urltoken);
 
-        Session::put('amount', $amount);
-        Session::put('reference', $reference);
+        Session::put('checkout_' . $urltoken, [
+            'amount' => $amount,
+            'reference' => $reference,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -34,7 +36,10 @@ class PaymentController extends Controller
     }
     public function showCheckoutPage($urltoken)
     {
-        return view('checkout', ['amount' => Session::get('amount'), 'reference' => Session::get('reference')]);
+        $checkout = Session::get('checkout_' . $urltoken);
+
+
+        return view('checkout', ['amount' => $checkout['amount'], 'reference' => $checkout['reference']]);
     }
     public function paymentInit(Request $request)
     {
