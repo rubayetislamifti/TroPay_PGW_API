@@ -24,9 +24,6 @@ class PaymentController extends Controller
 
         $checkoutLink = url('/checkout/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
 
-
-
-
         return response()->json([
             'success' => true,
             'payment_url' => $checkoutLink,
