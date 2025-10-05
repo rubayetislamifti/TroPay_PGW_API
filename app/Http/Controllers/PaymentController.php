@@ -22,7 +22,7 @@ class PaymentController extends Controller
 
         $urltoken = Str::uuid();
 
-        $checkoutLink = url('/payment/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
+        $checkoutLink = url('/checkout/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
 
 
 

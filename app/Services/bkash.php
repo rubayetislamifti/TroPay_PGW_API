@@ -132,7 +132,7 @@ class bkash{
 
     public function executePayment($paymentID)
     {
-//        dd($paymentID);
+        dd($paymentID);
         $paymentID = request('paymentID');
         if (!$this->token){
             return response()->json([
@@ -164,7 +164,7 @@ class bkash{
             return response()->json([
                 'success' => true,
                 'message' => 'Payment Successful',
-                'data' => $response->json()
+                'data' => $response->json('successCallbackURL')
             ]);
         }
         elseif (!$response->successful()){
