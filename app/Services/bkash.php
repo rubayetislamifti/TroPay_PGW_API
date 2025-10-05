@@ -145,6 +145,7 @@ class bkash{
         }
 
         if ($response->successful()){
+            dd($response->json());
             return response()->json();
         }
     }
