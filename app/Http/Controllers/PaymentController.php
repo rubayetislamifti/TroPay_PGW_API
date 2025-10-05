@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\bkash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class PaymentController extends Controller
@@ -23,10 +24,8 @@ class PaymentController extends Controller
 
         $checkoutLink = url('/payment/' . $urltoken);
 
-        Cache::put('checkout_' . $urltoken, [
-            'amount' => $amount,
-            'reference' => $reference,
-        ], now()->addMinutes(20));
+        Session::put('amount', $amount);
+        Session::put('reference', $reference);
 
         return response()->json([
             'success' => true,
@@ -35,8 +34,7 @@ class PaymentController extends Controller
     }
     public function showCheckoutPage($urltoken)
     {
-        $checkout = Cache::get('checkout_' . $urltoken);
-        return view('checkout', ['amount' => $checkout['amount'], 'reference' => $checkout['reference']]);
+        return view('checkout', ['amount' => Session::get('amount'), 'reference' => Session::get('reference')]);
     }
     public function paymentInit(Request $request)
     {
