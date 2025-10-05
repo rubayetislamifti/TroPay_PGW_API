@@ -174,6 +174,11 @@ class bkash{
                 'message' => 'Payment Successful',
                 'data' => $data
             ]);
+        }elseif (!$response->successful()){
+            return response()->json([
+                'success' => false,
+                'message' => $response->json()
+            ]);
         }
         else{
             return response()->json([
