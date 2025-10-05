@@ -22,7 +22,7 @@ class PaymentController extends Controller
 
         $createPayment = $bkash->createPayment($amount, $reference);
 
-        return $createPayment;
+        return response()->json($createPayment);
     }
 
     public function paymentSuccess(Request $request){

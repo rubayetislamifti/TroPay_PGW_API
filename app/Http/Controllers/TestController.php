@@ -11,23 +11,23 @@ class TestController extends Controller
     {
         $testApp = 'Rubayet_Islam';
         $testPassword = 'Rubayet_Islam2025';
-        $baseURL = 'https://tropay.zobayerdev.top/';
+        $baseURL = 'https://tropay.zobayerdev.top';
 
         if (env('APP_ENV') === 'production') {
             $response = Http::withHeaders([
                 'App-Key' => $testApp,
                 'App-Secret' => $testPassword,
-            ])->post($baseURL . 'api/payment');
+            ])->post($baseURL . '/api/payment');
         }else{
             $response = Http::withoutVerifying()->withHeaders([
                 'App-Key' => $testApp,
                 'App-Secret' => $testPassword,
-            ])->post($baseURL . 'api/payment',[
+            ])->post($baseURL . '/api/payment',[
                 'amount' => 1,
                 'reference' => '01642889275',
             ]);
         }
 
-        dd($response->json());
+        dd($response);
     }
 }
