@@ -39,6 +39,38 @@ class TestController extends Controller
         }catch (\Exception $e){
             dd($e->getMessage());
         }
-
+    }
+    public function testCallback()
+    {
+        $testApp = 'Rubayet_Islam';
+        $testPassword = 'Rubayet_Islam2025';
+        $baseURL = 'https://tropay.zobayerdev.top';
+        $amount = 1;
+        $reference = '01642889275';
+        try {
+            if (env('APP_ENV') === 'production') {
+                $response = Http::withHeaders([
+                    'App-Key' => $testApp,
+                    'App-Secret' => $testPassword,
+                ])->post($baseURL . '/api/payment/callbackURL',[
+                    'amount' => $amount,
+                    'reference' => $reference,
+                ]);
+            }else{
+                $response = Http::withoutVerifying()->withHeaders([
+                    'App-Key' => $testApp,
+                    'App-Secret' => $testPassword,
+                ])->post($baseURL . '/api/payment/callbackURL',[
+                    'amount' => $amount,
+                    'reference' => $reference,
+                ]);
+            }
+            if ($response->successful()){
+                dd($response->json());
+//                return redirect()->away($response->json()['payment_url']);
+            }
+        }catch (\Exception $e){
+            dd($e->getMessage());
+        }
     }
 }

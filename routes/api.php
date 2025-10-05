@@ -6,5 +6,5 @@ use App\Http\Controllers\PaymentController;
 
 Route::middleware(\App\Http\Middleware\ProtectedApp::class)->group(function () {
     Route::post('/payment', [PaymentController::class, 'paymentInit']);
-    Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::post('/payment/callbackURL', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 });
