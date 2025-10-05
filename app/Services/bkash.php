@@ -132,7 +132,7 @@ class bkash{
 
     public function executePayment($paymentID)
     {
-        dd($paymentID);
+//        dd($paymentID);
         $paymentID = request('paymentID');
         if (!$this->token){
             return response()->json([
