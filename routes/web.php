@@ -13,5 +13,6 @@ Route::get('/payment/callbackURL', [PaymentController::class, 'paymentSuccess'])
 
 Route::get('/payment/search/transaction', [PaymentController::class, 'searchTransactions'])->name('payment.searchTransactions');
 
+
 Route::get('test/payment',[TestController::class, 'testInit']);
 Route::get('test/payment/callbackURL',[TestController::class, 'testCallback']);

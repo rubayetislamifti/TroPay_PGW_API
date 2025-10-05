@@ -161,19 +161,10 @@ class bkash{
         }
 
         if ($response->successful()){
-            $data = [
-                'trxID' => $response->json('trxID'),
-                'transactionStatus' => $response->json('transactionStatus'),
-                'amount' => $response->json('amount'),
-                'merchantInvoiceNumber' => $response->json('merchantInvoiceNumber'),
-                'payerReference' => $response->json('payerReference'),
-                'customerMsisdn' => $response->json('customerMsisdn'),
-                'payerAccount' => $response->json('payerAccount'),
-            ];
             return response()->json([
                 'success' => true,
                 'message' => 'Payment Successful',
-                'data' => $data
+                'data' => $response->json()
             ]);
         }elseif (!$response->successful()){
             return response()->json([
@@ -186,6 +177,34 @@ class bkash{
                 'success' => false,
                 'message' => $response->json('errorMessage')
             ],$response->json('errorCode'));
+        }
+    }
+
+    public function queryTransaction($agreementID)
+    {
+        if (!$this->token){
+            return response()->json([
+                'success' => false,
+                'message' => 'Token invalid'
+            ]);
+        }
+
+        $key = $this->allKey();
+
+        if (env('APP_ENV') === 'production') {
+            $response = Http::withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['appKey'],
+            ])->post($key['baseURL'].'/tokenized/checkout/agreement/status', [
+                'agreementID' => $agreementID,
+            ]);
+        }else{
+            $response = Http::withoutVerifying()->withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['sandBoxAppKey'],
+            ])->post($key['sandBoxURL'].'/tokenized/checkout/agreement/status', [
+                'agreementID' => $agreementID,
+            ]);
         }
     }
 

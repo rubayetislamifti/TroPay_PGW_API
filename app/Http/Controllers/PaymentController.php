@@ -33,10 +33,7 @@ class PaymentController extends Controller
 
     public function paymentSuccess(Request $request){
         $bkash = new bkash($this->token);
-        $data = $request->validate([
-            'paymentID' => 'required',
-        ]);
-        $paymentID = $data['paymentID'];
+        $paymentID = $request->input('paymentID');
 
         $token = $bkash->getToken();
 
@@ -46,7 +43,25 @@ class PaymentController extends Controller
             $executePayment = $executePayment->getData(true);
         }
 
+//        return redirect()->route('payment.verify');
         return response()->json($executePayment);
+    }
+
+    public function verifyPayment(Request $request)
+    {
+        $bkash = new bkash($this->token);
+        $agreementID = $request->input('agreementID');
+
+        $token = $bkash->getToken();
+
+        $queryTransaction = $bkash->queryTransaction($agreementID);
+
+        if ($queryTransaction instanceof \Illuminate\Http\JsonResponse) {
+            $queryTransaction = $queryTransaction->getData(true);
+        }
+
+//        return redirect()->route('payment.verify');
+        return response()->json($queryTransaction);
     }
 
     public function searchTransactions(Request $request){

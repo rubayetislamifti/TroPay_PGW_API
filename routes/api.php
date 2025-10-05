@@ -10,4 +10,6 @@ Route::middleware(ProtectedApp::class)->group(function () {
     Route::post('/payment', [PaymentController::class, 'paymentInit']);
 
     Route::post('/payment/callbackURL', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+
+    Route::post('payment/verify', [PaymentController::class, 'verifyPayment'])->name('payment.verify');
 });
