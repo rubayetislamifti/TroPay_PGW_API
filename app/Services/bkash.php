@@ -111,10 +111,11 @@ class bkash{
         }
 
         if ($response->successful()){
-            return response()->json([
+            return response()->getOriginalContent()->json([
                 'success' => true,
                 'payment_url' => $response->json('bkashURL'),
             ],200);
+
         }
         return response()->json([
             'success' => false,

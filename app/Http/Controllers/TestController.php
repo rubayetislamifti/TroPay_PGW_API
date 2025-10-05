@@ -17,12 +17,12 @@ class TestController extends Controller
             $response = Http::withHeaders([
                 'App-Key' => $testApp,
                 'App-Secret' => $testPassword,
-            ])->post($baseURL . '/api/payment');
+            ])->get($baseURL . '/api/payment');
         }else{
             $response = Http::withoutVerifying()->withHeaders([
                 'App-Key' => $testApp,
                 'App-Secret' => $testPassword,
-            ])->post($baseURL . '/api/payment',[
+            ])->get($baseURL . '/api/payment',[
                 'amount' => 1,
                 'reference' => '01642889275',
             ]);
