@@ -19,23 +19,23 @@ class PaymentController extends Controller
         $amount = $request->input('amount');
         $reference = $request->input('reference');
 
-        $token = Str::uuid();
+        $urltoken = Str::uuid();
 
-        $checkoutLink = url('/payment/' . $token);
+        $checkoutLink = url('/payment/' . $urltoken);
 
-        Cache::put('checkout_' . $token, [
+        Cache::put('checkout_' . $urltoken, [
             'amount' => $amount,
             'reference' => $reference,
-        ], now()->addMinutes(10));
+        ], now()->addMinutes(20));
 
         return response()->json([
             'success' => true,
             'payment_url' => $checkoutLink,
         ]);
     }
-    public function showCheckoutPage($token)
+    public function showCheckoutPage($urltoken)
     {
-        $checkout = Cache::get('checkout_' . $token);
+        $checkout = Cache::get('checkout_' . $urltoken);
         return view('checkout', ['amount' => $checkout['amount'], 'reference' => $checkout['reference']]);
     }
     public function paymentInit(Request $request)
