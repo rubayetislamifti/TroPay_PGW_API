@@ -125,6 +125,27 @@ class bkash{
             ]);
         }
 
-        dd($paymentID);
+        $key = $this->allKey();
+
+        if (env('APP_ENV') === 'production') {
+            $response = Http::withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['appKey'],
+            ])->post($key['baseURL'].'/tokenized/checkout/execute', [
+                'paymentID' => $paymentID,
+            ]);
+        }
+        else{
+            $response = Http::withoutVerifying()->withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['sandBoxAppKey'],
+            ])->post($key['sandBoxURL'].'/tokenized/checkout/execute', [
+                'paymentID' => $paymentID,
+            ]);
+        }
+
+        if ($response->successful()){
+            return response()->json();
+        }
     }
 }
