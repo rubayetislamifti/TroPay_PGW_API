@@ -111,7 +111,10 @@ class bkash{
         }
 
         if ($response->successful()){
-            return redirect()->away($response->json()['bkashURL']);
+            return response()->json([
+                'success' => true,
+                'payment_url' => $response->json('bkashURL'),
+            ],200);
         }
         return response()->json([
             'success' => false,

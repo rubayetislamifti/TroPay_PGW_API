@@ -28,6 +28,6 @@ class TestController extends Controller
             ]);
         }
 
-        dd($response);
+        dd($response->json());
     }
 }
