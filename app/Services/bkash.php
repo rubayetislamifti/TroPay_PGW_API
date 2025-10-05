@@ -86,9 +86,9 @@ class bkash{
                 'Authorization' => $this->token,
                 'X-App-Key' => $key['appKey'],
             ])->post($key['baseURL'].'/tokenized/checkout/create', [
-                'mode' => '0011',
+                'mode' => '0000',
                 'payerReference' => $reference,
-                'callbackURL' => route('payment.success',[]),
+                'callbackURL' => route('payment.success'),
                 'amount' => $amount,
                 'currency' => 'BDT',
                 'intent' => 'sale',
@@ -102,7 +102,7 @@ class bkash{
             ])->post($key['sandBoxURL'].'/tokenized/checkout/create', [
                 'mode' => '0011',
                 'payerReference' => $reference,
-                'callbackURL' => route('payment.success',[]),
+                'callbackURL' => route('payment.success'),
                 'amount' => $amount,
                 'currency' => 'BDT',
                 'intent' => 'sale',
