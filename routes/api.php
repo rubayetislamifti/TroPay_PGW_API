@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware(\App\Http\Middleware\ProtectedApp::class)->group(function () {
+    Route::post('/payment', [PaymentController::class, 'paymentInit']);
+    Route::post('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+});
