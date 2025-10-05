@@ -22,29 +22,27 @@ class PaymentController extends Controller
 
         $urltoken = Str::uuid();
 
-        $checkoutLink = url('/payment/' . $urltoken);
+        $checkoutLink = url('/payment/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
 
-        Session::put('checkout_' . $urltoken, [
-            'amount' => $amount,
-            'reference' => $reference,
-        ]);
+
+
 
         return response()->json([
             'success' => true,
             'payment_url' => $checkoutLink,
         ]);
     }
-    public function showCheckoutPage($urltoken)
+    public function showCheckoutPage(Request $request, $urltoken)
     {
-        $checkout = Session::get('checkout_' . $urltoken);
-
-
-        return view('checkout', ['amount' => $checkout['amount'], 'reference' => $checkout['reference']]);
+        $amount = $request->input('amount');
+        $reference = $request->input('reference');
+        return view('checkout', ['amount' => $amount, 'reference' => $reference]);
     }
     public function paymentInit(Request $request)
     {
         $amount = $request->input('amount');
         $reference = $request->input('reference');
+//        dd($amount, $reference);
 //        $amount = 1;
 //        $reference = '01642889275';
         $bkash = new bkash($this->token);

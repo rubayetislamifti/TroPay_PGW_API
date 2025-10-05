@@ -46,8 +46,8 @@
                 <p class="text-muted small">Pay securely using your bKash account.</p>
                 <form action="{{route('payment.init')}}" method="post">
                     @csrf
-                    <input type="text" name="amount" value="{{$amount}}">
-                    <input type="text" name="reference" value="{{$reference}}">
+                    <input type="hidden" name="amount" value="{{$amount}}">
+                    <input type="hidden" name="reference" value="{{$reference}}">
                     <button type="submit" class="btn btn-primary btn-pay px-4">Pay with bKash</button>
                 </form>
 
