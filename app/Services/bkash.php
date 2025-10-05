@@ -100,7 +100,7 @@ class bkash{
                 'Authorization' => $this->token,
                 'X-App-Key' => $key['sandBoxAppKey'],
             ])->post($key['sandBoxURL'].'/tokenized/checkout/create', [
-                'mode' => '0011',
+                'mode' => '0000',
                 'payerReference' => $reference,
                 'callbackURL' => route('payment.success',[]),
                 'amount' => $amount,

@@ -14,8 +14,8 @@ class PaymentController extends Controller
     }
     public function paymentInit(Request $request)
     {
-        $amount = 1;
-        $reference = '01642889275';
+        $amount = $request->input('amount');
+        $reference = $request->input('reference');
         $bkash = new bkash($this->token);
 
         $token = $bkash->getToken();

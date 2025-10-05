@@ -27,7 +27,8 @@ class TestController extends Controller
                 'reference' => '01642889275',
             ]);
         }
-
-        dd($response->json());
+        if ($response->successful()){
+            return redirect()->away($response->json('payment_url'));
+        }
     }
 }
