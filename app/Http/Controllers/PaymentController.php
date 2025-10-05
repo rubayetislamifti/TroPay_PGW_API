@@ -19,8 +19,6 @@ class PaymentController extends Controller
         $amount = $request->input('amount');
         $reference = $request->input('reference');
 
-
-
         $token = Str::uuid();
 
         $checkoutLink = url('/payment/' . $token);
@@ -32,9 +30,7 @@ class PaymentController extends Controller
 
         return response()->json([
             'success' => true,
-            'checkout_url' => $checkoutLink,
-            'amount' => $amount,
-            'reference' => $reference,
+            'payment_url' => $checkoutLink,
         ]);
     }
     public function showCheckoutPage($token)
@@ -44,10 +40,10 @@ class PaymentController extends Controller
     }
     public function paymentInit(Request $request)
     {
-//        $amount = $request->input('amount');
-//        $reference = $request->input('reference');
-        $amount = 1;
-        $reference = '01642889275';
+        $amount = $request->input('amount');
+        $reference = $request->input('reference');
+//        $amount = 1;
+//        $reference = '01642889275';
         $bkash = new bkash($this->token);
 
         $token = $bkash->getToken();
@@ -58,7 +54,7 @@ class PaymentController extends Controller
             $createPayment = $createPayment->getData(true);
         }
 
-        return response()->json($createPayment);
+        return redirect()->away($createPayment['payment_url']);
     }
 
     public function paymentSuccess(Request $request){

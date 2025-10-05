@@ -33,7 +33,7 @@ class TestController extends Controller
                 ]);
             }
             if ($response->successful()){
-//                dd($response->json('payment_url'));
+//                dd($response->json());
                 return redirect()->away($response->json()['payment_url']);
             }
         }catch (\Exception $e){
