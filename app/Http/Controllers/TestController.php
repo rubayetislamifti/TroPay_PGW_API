@@ -40,8 +40,9 @@ class TestController extends Controller
             dd($e->getMessage());
         }
     }
-    public function testCallback()
+    public function testCallback(Request $request)
     {
+        dd($request->query('paymentID'));
         $testApp = 'Rubayet_Islam';
         $testPassword = 'Rubayet_Islam2025';
         $baseURL = 'https://tropay.zobayerdev.top';
@@ -52,18 +53,12 @@ class TestController extends Controller
                 $response = Http::withHeaders([
                     'App-Key' => $testApp,
                     'App-Secret' => $testPassword,
-                ])->post($baseURL . '/api/payment/callbackURL',[
-                    'amount' => $amount,
-                    'reference' => $reference,
-                ]);
+                ])->post($baseURL . '/api/payment/callbackURL');
             }else{
                 $response = Http::withoutVerifying()->withHeaders([
                     'App-Key' => $testApp,
                     'App-Secret' => $testPassword,
-                ])->post($baseURL . '/api/payment/callbackURL',[
-                    'amount' => $amount,
-                    'reference' => $reference,
-                ]);
+                ])->post($baseURL . '/api/payment/callbackURL');
             }
             if ($response->successful()){
                 dd($response->json());

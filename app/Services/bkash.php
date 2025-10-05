@@ -130,9 +130,9 @@ class bkash{
         ],$response->json('errorCode'));
     }
 
-    public function executePayment()
+    public function executePayment($paymentID)
     {
-        $paymentID = request('paymentID');
+//        $paymentID = request('paymentID');
         if (!$this->token){
             return response()->json([
                 'success' => false,
@@ -185,6 +185,44 @@ class bkash{
                 'success' => false,
                 'message' => $response->json('errorMessage')
             ],$response->json('errorCode'));
+        }
+    }
+
+    public function searchTransaction($trxID)
+    {
+        if (!$this->token){
+            return response()->json([
+                'success' => false,
+                'message' => 'Token invalid'
+            ]);
+        }
+
+        $key = $this->allKey();
+
+        if (env('APP_ENV') === 'production') {
+            $response = Http::withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['appKey'],
+            ])->post($key['baseURL'].'/tokenized/checkout/general/searchTran', [
+                'trxID' => $trxID,
+            ]);
+        }
+        else{
+            $response = Http::withoutVerifying()->withHeaders([
+                'Authorization' => $this->token,
+                'X-App-Key' => $key['sandBoxAppKey'],
+            ])->post($key['sandBoxURL'].'/tokenized/checkout/general/searchTran', [
+                'trxID' => $trxID,
+            ]);
+        }
+
+        if ($response->successful()){
+            return response()->json();
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => $response->json()
+            ]);
         }
     }
 }

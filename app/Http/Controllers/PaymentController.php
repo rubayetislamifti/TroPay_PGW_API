@@ -34,14 +34,32 @@ class PaymentController extends Controller
     public function paymentSuccess(Request $request){
         $bkash = new bkash($this->token);
 
+        $paymentID = $request->input('paymentID');
+
         $token = $bkash->getToken();
 
-        $executePayment = $bkash->executePayment();
+        $executePayment = $bkash->executePayment($paymentID);
 
         if ($executePayment instanceof \Illuminate\Http\JsonResponse) {
             $executePayment = $executePayment->getData(true);
         }
 
         return response()->json($executePayment);
+    }
+
+    public function searchTransactions(Request $request){
+        $bkash = new bkash($this->token);
+
+        $token = $bkash->getToken();
+
+        $trxID = $request->input('trxID');
+
+        $searchTransaction = $bkash->searchTransaction($trxID);
+
+        if ($searchTransaction instanceof \Illuminate\Http\JsonResponse) {
+            $searchTransaction = $searchTransaction->getData(true);
+        }
+
+        return response()->json($searchTransaction);
     }
 }
