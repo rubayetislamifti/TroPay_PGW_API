@@ -111,7 +111,7 @@ class bkash{
         }
 
         if ($response->successful()){
-            dd($response->json());
+//            dd($response->json());
             return response()->json([
                 'success' => true,
                 'payment_url' => $response->json('bkashURL'),
