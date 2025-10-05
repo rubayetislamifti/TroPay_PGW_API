@@ -33,8 +33,10 @@ class PaymentController extends Controller
 
     public function paymentSuccess(Request $request){
         $bkash = new bkash($this->token);
-        dd($request->input('paymentID'));
-        $paymentID = $request->input('paymentID');
+        $data = $request->validate([
+            'paymentID' => 'required',
+        ]);
+        $paymentID = $data['paymentID'];
 
         $token = $bkash->getToken();
 
