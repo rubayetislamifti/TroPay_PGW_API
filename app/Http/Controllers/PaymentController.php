@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\bkash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -12,12 +14,40 @@ class PaymentController extends Controller
     public function __construct($token=null){
         $this->token = $token;
     }
-    public function paymentInit(Request $request)
+    public function createCheckout(Request $request)
     {
         $amount = $request->input('amount');
         $reference = $request->input('reference');
-//        $amount = 1;
-//        $reference = '01642889275';
+
+
+
+        $token = Str::uuid();
+
+        $checkoutLink = url('/payment/' . $token);
+
+        Cache::put('checkout_' . $token, [
+            'amount' => $amount,
+            'reference' => $reference,
+        ], now()->addMinutes(10));
+
+        return response()->json([
+            'success' => true,
+            'checkout_url' => $checkoutLink,
+            'amount' => $amount,
+            'reference' => $reference,
+        ]);
+    }
+    public function showCheckoutPage($token)
+    {
+        $checkout = Cache::get('checkout_' . $token);
+        return view('checkout', ['amount' => $checkout['amount'], 'reference' => $checkout['reference']]);
+    }
+    public function paymentInit(Request $request)
+    {
+//        $amount = $request->input('amount');
+//        $reference = $request->input('reference');
+        $amount = 1;
+        $reference = '01642889275';
         $bkash = new bkash($this->token);
 
         $token = $bkash->getToken();
@@ -43,7 +73,6 @@ class PaymentController extends Controller
             $executePayment = $executePayment->getData(true);
         }
 
-//        return redirect()->route('payment.verify');
         return response()->json($executePayment);
     }
 
@@ -60,7 +89,6 @@ class PaymentController extends Controller
             $queryTransaction = $queryTransaction->getData(true);
         }
 
-//        return redirect()->route('payment.verify');
         return response()->json($queryTransaction);
     }
 

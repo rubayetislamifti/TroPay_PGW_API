@@ -40,25 +40,27 @@ class TestController extends Controller
             dd($e->getMessage());
         }
     }
-    public function testCallback(Request $request)
+    public function testVerify(Request $request)
     {
-        dd($request->query('paymentID'));
         $testApp = 'Rubayet_Islam';
         $testPassword = 'Rubayet_Islam2025';
         $baseURL = 'https://tropay.zobayerdev.top';
-        $amount = 1;
-        $reference = '01642889275';
+        $agreementID = $request->query('agreementID');
         try {
             if (env('APP_ENV') === 'production') {
                 $response = Http::withHeaders([
                     'App-Key' => $testApp,
                     'App-Secret' => $testPassword,
-                ])->post($baseURL . '/api/payment/callbackURL');
+                ])->post($baseURL . '/api/payment/verify',[
+                    'agreementID' => $agreementID,
+                ]);
             }else{
                 $response = Http::withoutVerifying()->withHeaders([
                     'App-Key' => $testApp,
                     'App-Secret' => $testPassword,
-                ])->post($baseURL . '/api/payment/callbackURL');
+                ])->post($baseURL . '/api/payment/verify',[
+                    'agreementID'=> $agreementID,
+                ]);
             }
             if ($response->successful()){
                 dd($response->json());
