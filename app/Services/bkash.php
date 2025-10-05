@@ -113,6 +113,10 @@ class bkash{
         if ($response->successful()){
             return redirect()->away($response->json()['bkashURL']);
         }
+        return response()->json([
+            'success' => false,
+            'message' => $response->json('errorMessage')
+        ],$response->json('errorCode'));
     }
 
     public function executePayment()
@@ -145,8 +149,26 @@ class bkash{
         }
 
         if ($response->successful()){
-            dd($response->json());
-            return response()->json();
+            $data = [
+                'trxID' => $response->json('trxID'),
+                'transactionStatus' => $response->json('transactionStatus'),
+                'amount' => $response->json('amount'),
+                'merchantInvoiceNumber' => $response->json('merchantInvoiceNumber'),
+                'payerReference' => $response->json('payerReference'),
+                'customerMsisdn' => $response->json('customerMsisdn'),
+                'payerAccount' => $response->json('payerAccount'),
+            ];
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment Successful',
+                'data' => $data
+            ]);
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => $response->json('errorMessage')
+            ],$response->json('errorCode'));
         }
     }
 }
