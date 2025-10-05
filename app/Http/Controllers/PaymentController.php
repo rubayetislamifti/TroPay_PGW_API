@@ -28,7 +28,7 @@ class PaymentController extends Controller
     public function paymentSuccess(Request $request){
         $bkash = new bkash($this->token);
 
-//        $token = $bkash->getToken();
+        $token = $bkash->getToken();
 
         $executePayment = $bkash->executePayment();
 
