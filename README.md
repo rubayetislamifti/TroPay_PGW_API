@@ -1,61 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏦 TroPay API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📘 Introduction
+**TroPay** is developed by **TrodevIT** — a simple, secure, and unified **payment gateway API**.  
+It allows you to integrate **bKash**, **Nagad**, **Rocket**, or other local payment systems with your web or mobile applications.
 
-## About Laravel
+After creating an account, you will receive your unique:
+- **App Key**
+- **App Secret**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+These credentials are required for authentication.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🌐 Base URL
+```
+{baseURL}
+```
 
-## Learning Laravel
+> You will get your **baseURL** after TroPay provides your account credentials.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🔑 Required Headers
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Header Name | Description | Example |
+|--------------|-------------|----------|
+| `App-Key` | Your unique App Key | `Rubayet_Islam` |
+| `App-Secret` | Your unique App Secret | `Rubayet_Islam2025` |
 
-## Laravel Sponsors
+> Both headers are **required** for every API call.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 💰 Create Payment
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Endpoint**
+```
+POST {baseURL}/api/payment
+```
 
-## Contributing
+### 📄 Description
+Initialize a new payment with TroPay.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🧾 Request Body (Form Data)
 
-## Code of Conduct
+| Parameter   | Type   | Required | Description                 | Example       |
+|-------------|--------|----------|-----------------------------|---------------|
+| `amount`    | number | ✅        | The payment amount          | `1`           |
+| `reference` | string | ✅        | Customer or order reference | `01642889275` |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 🧠 Example Request
+```bash
+curl -X POST {baseURL}/api/payment \
+-H "App-Key: Rubayet_Islam" \
+-H "App-Secret: Rubayet_Islam2025" \
+-F "amount=1" \
+-F "reference=01642889275"
+```
 
-## Security Vulnerabilities
+### ✅ Example Response
+```json
+{
+  "success": true,
+  "payment_url": "https://example.tropay.com/checkout/abc123"
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🔍 Verify Payment
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Endpoint**
+```
+POST {baseURL}/api/payment/verify
+```
+
+### 📄 Description
+Use this endpoint to verify the status of a payment after initialization.
+
+### 🧾 Request Body (Form Data)
+
+| Parameter | Type | Required | Description | Example |
+|------------|------|-----------|--------------|----------|
+| `agreementID` | string | ✅ | The unique agreement/payment ID | `TrodevOLB57RV1759686645570` |
+
+### 🧠 Example Request
+```bash
+curl -X POST {baseURL}/api/payment/verify \
+-H "App-Key: Rubayet_Islam" \
+-H "App-Secret: Rubayet_Islam2025" \
+-F "agreementID=TrodevOLB57RV1759686645570"
+```
+
+### ✅ Example Response
+```json
+{
+  "success": true,
+  "status": "Completed",
+  "transaction_id": "TX12345ABC",
+  "amount": "1.00",
+  "reference": "01642889275"
+}
+```
+
+---
+
+## ⚙️ Environment Variable
+
+| Key | Description |
+|------|-------------|
+| `baseURL` | The root URL of your API (production or sandbox) |
+
+You can define this variable in Postman or your `.env` file.
+
+---
+
+## 🧩 Summary
+
+| Action | Method | Endpoint | Purpose |
+|--------|---------|-----------|----------|
+| Create Payment | `POST` | `/api/payment` | Initialize new payment |
+| Verify Payment | `POST` | `/api/payment/verify` | Verify payment status |
+
+---
+
+## 👨‍💻 Developed by
+**TrodevIT**  
+📧 [support@trodevit.com](mailto:support@trodevit.com)  
+🌐 [www.trodevit.com](https://www.trodevit.com)
+
+---
