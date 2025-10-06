@@ -141,6 +141,8 @@ class bkash{
             ]);
         }
 
+        dd(request()->getHost());
+
         $key = $this->allKey();
 
         if (env('APP_ENV') === 'production') {

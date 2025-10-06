@@ -42,6 +42,7 @@ class TestController extends Controller
     }
     public function testVerify(Request $request)
     {
+//        dd($request->getHost());
         $testApp = 'Rubayet_Islam';
         $testPassword = 'Rubayet_Islam2025';
         $baseURL = 'https://tropay.zobayerdev.top';

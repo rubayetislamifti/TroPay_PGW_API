@@ -20,6 +20,7 @@ class PaymentController extends Controller
         $amount = $request->input('amount');
         $reference = $request->input('reference');
 
+
         $urltoken = Str::uuid();
 
         $checkoutLink = url('/checkout/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
