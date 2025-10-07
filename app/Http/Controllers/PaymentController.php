@@ -17,22 +17,32 @@ class PaymentController extends Controller
     }
     public function createCheckout(Request $request)
     {
-        dd($request->all());
-        $amount = $request->input('amount');
-        $reference = $request->input('reference');
+        try {
 
 
-        $urltoken = Str::uuid();
-        if (env('APP_ENV') === 'production') {
-            $checkoutLink = route('checkout.show'.$urltoken) . '?amount=' . $amount . '&reference=' . $reference;
-        }else{
-            $checkoutLink = route('sandbox') . '?amount=' . $amount . '&reference=' . $reference;
+            dd($request->all());
+            $amount = $request->input('amount');
+            $reference = $request->input('reference');
+
+
+            $urltoken = Str::uuid();
+            if (env('APP_ENV') === 'production') {
+                $checkoutLink = route('checkout.show' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
+            } else {
+                $checkoutLink = route('sandbox') . '?amount=' . $amount . '&reference=' . $reference;
+            }
+
+            return response()->json([
+                'success' => true,
+                'payment_url' => $checkoutLink,
+            ]);
         }
-
-        return response()->json([
-            'success' => true,
-            'payment_url' => $checkoutLink,
-        ]);
+        catch (\Exception $e) {
+            return response()->json([
+                'success' => true,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
     public function showCheckoutPage(Request $request, $urltoken)
     {
