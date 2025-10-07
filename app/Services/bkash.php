@@ -40,7 +40,7 @@ class bkash{
             'sandBoxPassword' => $sandBoxPassword
         ];
     }
-    public function getToken()
+    public function getToken($urltoken = null)
     {
         $key = $this->allKey();
 
@@ -52,19 +52,12 @@ class bkash{
                 'app_key' => $key['appKey'],
                 'app_secret' => $key['appSecret'],
             ]);
-        }else{
-            return redirect()->route('sandbox');
-//            $response = Http::withoutVerifying()->withHeaders([
-//                'username' => $key['sandBoxUsername'],
-//                'password' => $key['sandBoxPassword'],
-//            ])->post($key['sandBoxURL'].'/tokenized/checkout/token/grant', [
-//                'app_key' => $key['sandBoxAppKey'],
-//                'app_secret' => $key['sandBoxAppPassword'],
-//            ]);
+            $token = $response->json()['id_token'];
+
         }
 
         if ($response->successful()){
-            $this->token = $response->json()['id_token'];
+            $this->token = $token;
         }
         else{
             return response()->json([
@@ -72,6 +65,15 @@ class bkash{
                 'message' => $response->json()
             ]);
         }
+
+//        else{
+////            dd(route('sandbox',['token'=>$urltoken]));
+//            $this->token = Str::random(40);
+//
+//        }
+//        return response()->json([
+//            'token' => $this->token,
+//        ]);
     }
 
     public function createPayment($amount, $reference){
@@ -95,10 +97,15 @@ class bkash{
                 'intent' => 'sale',
                 'merchantInvoiceNumber' => Str::random(16)
             ]);
-        }
-        else{
 
-//            $invoice =
+            dd($response->json());
+            $redirect = $response->json('bkashURL');
+
+
+        }
+//        else{
+
+
 
 //            $response = Http::withoutVerifying()->withHeaders([
 //                'Authorization' => $this->token,
@@ -112,13 +119,13 @@ class bkash{
 //                'intent' => 'sale',
 //                'merchantInvoiceNumber' => Str::random(16)
 //            ]);
-        }
+//        }
 
         if ($response->successful()){
-//            dd($response->json());
+
             return response()->json([
                 'success' => true,
-                'payment_url' => $response->json('bkashURL'),
+                'payment_url' => $redirect
             ],200);
 
         }
@@ -128,6 +135,8 @@ class bkash{
                 'message' => $response->json()
             ],200);
         }
+//        dd($response->json());
+
         return response()->json([
             'success' => false,
             'message' => $response->json('errorMessage')
@@ -137,7 +146,6 @@ class bkash{
     public function executePayment($paymentID)
     {
 //        dd($paymentID);
-        $paymentID = request('paymentID');
         if (!$this->token){
             return response()->json([
                 'success' => false,

@@ -20,14 +20,18 @@ class PaymentController extends Controller
         try {
             $amount = $request->input('amount');
             $reference = $request->input('reference');
-
+//            dd($amount, $reference);
 
             $urltoken = Str::uuid();
             if (env('APP_ENV') === 'production') {
                 $checkoutLink = route('checkout.show' , $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
             } else {
-                $checkoutLink = route('sandbox') . '?amount=' . $amount . '&reference=' . $reference;
+                $checkoutLink = route('sandbox',$urltoken) . '&amount=' . $amount . '&reference=' . $reference;
             }
+
+//            $bkash = new bkash($this->token);
+//
+//            $tokenResponse = $bkash->getToken($urltoken);
 
             return response()->json([
                 'success' => true,
@@ -50,13 +54,16 @@ class PaymentController extends Controller
 
     public function sandBox(Request $request)
     {
+
         $amount = $request->input('amount');
         $reference = $request->input('reference');
+
+//        dd($amount, $reference);
         return view('sandbox', ['amount' => $amount, 'reference' => $reference]);
     }
     public function paymentInit(Request $request)
     {
-
+        if (env('APP_ENV')=='production') {
             $amount = $request->input('amount');
             $reference = $request->input('reference');
 
@@ -70,23 +77,38 @@ class PaymentController extends Controller
                 $createPayment = $createPayment->getData(true);
             }
 
+//            dd($createPayment);
             return redirect()->away($createPayment['payment_url']);
+        }
+        else{
+            $invoice = Str::random(16);
+            $paymentID = Str::uuid();
+            $redirect = route('payment.success').'?paymentID='.$paymentID;
+
+            return redirect()->away($redirect);
+        }
 
     }
 
     public function paymentSuccess(Request $request){
-        $bkash = new bkash($this->token);
-        $paymentID = $request->input('paymentID');
+        if (env('APP_ENV')=='production') {
+            $bkash = new bkash($this->token);
+            $paymentID = $request->input('paymentID');
 
-        $token = $bkash->getToken();
+            $token = $bkash->getToken();
 
-        $executePayment = $bkash->executePayment($paymentID);
+            $executePayment = $bkash->executePayment($paymentID);
 
-        if ($executePayment instanceof \Illuminate\Http\JsonResponse) {
-            $executePayment = $executePayment->getData(true);
+            if ($executePayment instanceof \Illuminate\Http\JsonResponse) {
+                $executePayment = $executePayment->getData(true);
+            }
+
+            return response()->json($executePayment);
+        }else{
+            $paymentID = $request->input('paymentID');
+
+            dd($paymentID);
         }
-
-        return response()->json($executePayment);
     }
 
     public function verifyPayment(Request $request)

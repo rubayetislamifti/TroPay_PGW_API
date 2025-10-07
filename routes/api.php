@@ -8,7 +8,7 @@ use App\Http\Controllers\TestController;
 
 Route::middleware(ProtectedApp::class)->group(function () {
 
-    Route::post('/payment/checkout', [PaymentController::class, 'createCheckout']);
+    Route::post('/payment', [PaymentController::class, 'createCheckout']);
 
 //    Route::post('/payment/callbackURL', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 
