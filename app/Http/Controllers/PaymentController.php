@@ -24,7 +24,7 @@ class PaymentController extends Controller
 
             $urltoken = Str::uuid();
             if (env('APP_ENV') === 'production') {
-                $checkoutLink = route('checkout.show' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
+                $checkoutLink = route('checkout.show' , $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
             } else {
                 $checkoutLink = route('sandbox') . '?amount=' . $amount . '&reference=' . $reference;
             }
