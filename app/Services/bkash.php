@@ -98,7 +98,7 @@ class bkash{
                 'merchantInvoiceNumber' => Str::random(16)
             ]);
 
-            dd($response->json());
+//            dd($response->json());
             $redirect = $response->json('bkashURL');
 
 
@@ -173,6 +173,7 @@ class bkash{
         }
 
         if ($response->successful()){
+            dd($response->json());
             $data = [
                 'paymentID' => $response->json('paymentID'),
                 'agreementID' => $response->json('agreementID'),
