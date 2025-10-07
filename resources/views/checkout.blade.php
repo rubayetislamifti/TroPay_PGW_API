@@ -44,12 +44,12 @@
                 <img src="{{ asset('images/gateways/bkash.png') }}" alt="bKash" class="gateway-logo mx-auto mb-3">
                 <h5 class="fw-semibold">bKash</h5>
                 <p class="text-muted small">Pay securely using your bKash account.</p>
-                <form action="{{route('payment.init')}}" method="post">
-                    @csrf
-                    <input type="hidden" name="amount" value="{{$amount}}">
-                    <input type="hidden" name="reference" value="{{$reference}}">
-                    <button type="submit" class="btn btn-primary btn-pay px-4">Pay with bKash</button>
-                </form>
+                    <form action="{{route('payment.init')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="amount" value="{{$amount}}">
+                        <input type="hidden" name="reference" value="{{$reference}}">
+                        <button type="submit" class="btn btn-primary btn-pay px-4">Pay with bKash</button>
+                    </form>
 
             </div>
         </div>

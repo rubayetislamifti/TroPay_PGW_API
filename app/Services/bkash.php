@@ -53,13 +53,14 @@ class bkash{
                 'app_secret' => $key['appSecret'],
             ]);
         }else{
-            $response = Http::withoutVerifying()->withHeaders([
-                'username' => $key['sandBoxUsername'],
-                'password' => $key['sandBoxPassword'],
-            ])->post($key['sandBoxURL'].'/tokenized/checkout/token/grant', [
-                'app_key' => $key['sandBoxAppKey'],
-                'app_secret' => $key['sandBoxAppPassword'],
-            ]);
+            return redirect()->route('sandbox');
+//            $response = Http::withoutVerifying()->withHeaders([
+//                'username' => $key['sandBoxUsername'],
+//                'password' => $key['sandBoxPassword'],
+//            ])->post($key['sandBoxURL'].'/tokenized/checkout/token/grant', [
+//                'app_key' => $key['sandBoxAppKey'],
+//                'app_secret' => $key['sandBoxAppPassword'],
+//            ]);
         }
 
         if ($response->successful()){
@@ -96,18 +97,21 @@ class bkash{
             ]);
         }
         else{
-            $response = Http::withoutVerifying()->withHeaders([
-                'Authorization' => $this->token,
-                'X-App-Key' => $key['sandBoxAppKey'],
-            ])->post($key['sandBoxURL'].'/tokenized/checkout/create', [
-                'mode' => '0000',
-                'payerReference' => $reference,
-                'callbackURL' => route('payment.success'),
-                'amount' => $amount,
-                'currency' => 'BDT',
-                'intent' => 'sale',
-                'merchantInvoiceNumber' => Str::random(16)
-            ]);
+
+//            $invoice =
+
+//            $response = Http::withoutVerifying()->withHeaders([
+//                'Authorization' => $this->token,
+//                'X-App-Key' => $key['sandBoxAppKey'],
+//            ])->post($key['sandBoxURL'].'/tokenized/checkout/create', [
+//                'mode' => '0000',
+//                'payerReference' => $reference,
+//                'callbackURL' => route('payment.success'),
+//                'amount' => $amount,
+//                'currency' => 'BDT',
+//                'intent' => 'sale',
+//                'merchantInvoiceNumber' => Str::random(16)
+//            ]);
         }
 
         if ($response->successful()){
@@ -140,8 +144,6 @@ class bkash{
                 'message' => 'Token invalid'
             ]);
         }
-
-        dd(request()->getHost());
 
         $key = $this->allKey();
 

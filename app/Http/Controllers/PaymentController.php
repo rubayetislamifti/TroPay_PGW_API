@@ -22,8 +22,11 @@ class PaymentController extends Controller
 
 
         $urltoken = Str::uuid();
-
-        $checkoutLink = url('/checkout/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
+        if (env('APP_ENV') === 'production') {
+            $checkoutLink = url('/checkout/' . $urltoken) . '?amount=' . $amount . '&reference=' . $reference;
+        }else{
+            $checkoutLink = route('sandbox') . '?amount=' . $amount . '&reference=' . $reference;
+        }
 
         return response()->json([
             'success' => true,
@@ -36,24 +39,31 @@ class PaymentController extends Controller
         $reference = $request->input('reference');
         return view('checkout', ['amount' => $amount, 'reference' => $reference]);
     }
-    public function paymentInit(Request $request)
+
+    public function sandBox(Request $request)
     {
         $amount = $request->input('amount');
         $reference = $request->input('reference');
-//        dd($amount, $reference);
-//        $amount = 1;
-//        $reference = '01642889275';
-        $bkash = new bkash($this->token);
+        return view('sandbox', ['amount' => $amount, 'reference' => $reference]);
+    }
+    public function paymentInit(Request $request)
+    {
 
-        $token = $bkash->getToken();
+            $amount = $request->input('amount');
+            $reference = $request->input('reference');
 
-        $createPayment = $bkash->createPayment($amount, $reference);
+            $bkash = new bkash($this->token);
 
-        if ($createPayment instanceof \Illuminate\Http\JsonResponse) {
-            $createPayment = $createPayment->getData(true);
-        }
+            $token = $bkash->getToken();
 
-        return redirect()->away($createPayment['payment_url']);
+            $createPayment = $bkash->createPayment($amount, $reference);
+
+            if ($createPayment instanceof \Illuminate\Http\JsonResponse) {
+                $createPayment = $createPayment->getData(true);
+            }
+
+            return redirect()->away($createPayment['payment_url']);
+
     }
 
     public function paymentSuccess(Request $request){
