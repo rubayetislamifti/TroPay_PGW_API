@@ -18,9 +18,6 @@ class PaymentController extends Controller
     public function createCheckout(Request $request)
     {
         try {
-
-
-            dd($request->all());
             $amount = $request->input('amount');
             $reference = $request->input('reference');
 
