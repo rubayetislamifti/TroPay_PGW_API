@@ -104,7 +104,7 @@ class PaymentController extends Controller
             }
 
 //            return response()->json($executePayment);
-            return redirect()->route('payment.verify',['agreementID'=>$paymentID]);
+            return redirect()->route('payment.verify',['agreementID'=>$executePayment('agreementID')]);
         }else{
             $paymentID = $request->input('paymentID');
 
