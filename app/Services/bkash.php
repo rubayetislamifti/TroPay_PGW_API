@@ -147,7 +147,7 @@ class bkash{
 
     public function executePayment($paymentID)
     {
-        Session::get('paymentID')
+        Session::get('paymentID');
 //        dd($paymentID);
         if (!$this->token){
             return response()->json([
