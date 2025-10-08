@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\bkash;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -108,7 +109,7 @@ class PaymentController extends Controller
                 'paymentID' => $executePayment['data']['paymentID'],
                 'agreementID' => $executePayment['data']['agreementID'],
                 'redirect' => route('payment.verify')
-            ],$executePayment['data']['code']);
+            ],Response::HTTP_OK);
         }else{
             $paymentID = $request->input('paymentID');
 

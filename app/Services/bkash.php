@@ -182,7 +182,6 @@ class bkash{
                 'agreementID' => $response->json('agreementID'),
                 'customerMsisdn' => $response->json('customerMsisdn'),
                 'message' => $response->json('statusMessage'),
-                'code' => $response->json('statusCode'),
             ];
 
             return response()->json([
