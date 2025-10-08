@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class bkash{
@@ -98,6 +99,7 @@ class bkash{
                 'merchantInvoiceNumber' => Str::random(16)
             ]);
 
+            Session::put('paymentID',$response->json('paymentID'));
 //            dd($response->json());
             $redirect = $response->json('bkashURL');
 
@@ -145,6 +147,7 @@ class bkash{
 
     public function executePayment($paymentID)
     {
+        Session::get('paymentID')
 //        dd($paymentID);
         if (!$this->token){
             return response()->json([
@@ -173,7 +176,7 @@ class bkash{
         }
 
         if ($response->successful()){
-            dd($response->json());
+//            dd($response->json());
             $data = [
                 'paymentID' => $response->json('paymentID'),
                 'agreementID' => $response->json('agreementID'),
