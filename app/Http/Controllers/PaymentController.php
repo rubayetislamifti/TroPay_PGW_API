@@ -102,9 +102,13 @@ class PaymentController extends Controller
             if ($executePayment instanceof \Illuminate\Http\JsonResponse) {
                 $executePayment = $executePayment->getData(true);
             }
-            dd($executePayment['data']['agreementID']);
-//            return response()->json($executePayment);
-            return redirect()->route('payment.verify',['agreementID'=>$executePayment('agreementID')]);
+            return response()->json([
+               'success' => true,
+                'message' => $executePayment['data']['message'],
+                'paymentID' => $executePayment['data']['paymentID'],
+                'agreementID' => $executePayment['data']['agreementID'],
+                'redirect' => route('payment.verify')
+            ],$executePayment['data']['code']);
         }else{
             $paymentID = $request->input('paymentID');
 
