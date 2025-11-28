@@ -19,5 +19,5 @@ Route::get('/payment/search/transaction', [PaymentController::class, 'searchTran
 
 
 Route::get('test/payment',[TestController::class, 'testInit']);
-Route::get('test/payment/callbackURL',[TestController::class, 'testCallback']);
+//Route::get('test/payment/callbackURL',[TestController::class, 'testCallback']);
 Route::get('test/payment/verify',[TestController::class, 'testVerify']);
